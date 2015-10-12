@@ -1,5 +1,20 @@
 %!TEX root = ../../Master.tex
 \subsection{ROS}
-ROS eller Robot Operating System er et framework med opensource-biblioteker til programmering af robotter af alle afskygninger. Der er ligeledes computer-vision værktøjer der gør det muligt at nemt og indkorporere kamera inputs, til identifikation og lokalisering af objekter. Det er dette operativsystem der anvendes, sammen med et webkamera, til at kontrollere CrustCrawler armen. 
-\newline
-Frameworket bygger på en Publisher/Subscriber struktur. System "nodes" er i stand til at sende beskeder imellem hinanden ved at enten publishe/subscribe på topics. En node som er interesseret i en bestemt datainformation vil subscribe på det topic som indeholder den ønskede information.
+
+ROS (Robot Operating System) er en samling af software der kan bruges til udvikling af robotsystemer.
+ROS integrerer også en række andre værktøjer til bla. simulering og vision. \\
+
+I projektet anvendes ROS til at styre CrustCrawler robotten. Til at detekere klodsernes placering og farve bruges OpenCV sammen med billeder fra kameraet. \\
+
+Et ROS projekt består af en samling processer med et enkelt ansvar, f.eks. planning, vision, control, etc.
+ROS håndterer kommunikationen imellem disse processer.
+De processer er konceptuelt enten en node eller en service, der kommunikerer via topics med messages. \\
+
+En node er en selvstændig process der kan kommunikere med andre nodes ved at publishe og subscribe på et topic. \\
+Kommunikationen i ROS består af Messages som definerer en type for beskeden.
+Det kan f.eks. være simple typer som int og double, eller mere komplekse som PoseArray, der beskriver et array af typen Pose der indeholder en position og rotation i 3 dimensioner. \\
+En service implementerer en request-response kommunikations model, i stedet for peer-to-peer modellen imellem nodes. \\
+ROS master bruges til at registere alle nodes, services, topics, osv. så der skabes en oversigt over hvad der er tilgængeligt i systemet. \\
+Der findes også en parameter server i ROS.
+Den står for at registerer globale værdier i systemet, som f.eks. konfigurations informationer.
+Den er opbygget som en key-value store, hvor værdier kan gemmes og hentes ud fra en key f.eks. setParam('usbport', '/dev/ttyUSB0').
