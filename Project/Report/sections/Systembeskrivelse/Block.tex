@@ -1,0 +1,44 @@
+%!TEX root = ../../Master.tex
+\subsubsection{Block} % (fold)
+\label{subsub:block}
+
+Block er en klasse til håndtering af en klods. Klassen har ansvar for at holde styr på klodsens orientering samt placering i form af et koordinat for klodsens centrum. Dette opnås ved hjælp af klassens to funktioner, som er beskrevet herunder. \\
+
+\textbf{img2base\_transform} \\
+Denne funktion har til formål at transformere koordinatsættet fra billedet, som angives i pixels til koordinatsættet for robotten, som angives i cm.\\
+
+Første del af funktionen står for at oversætte pixelkoordinater til koordinator i cm. Dette er gjort ved at finde antallet af pixels på en cm på billedet og derved dele alle pixel koordinator med dette. \\
+
+Den sidste del består i at transformere billedkoordinatsættet til robotkoordinatsættet. De to koordinatsæt er illustret i \autoref{fig:img2base}, hvor koordinatsættet øverst i venstre side er for billedet og koordinatsættet nederst i midten er for robotten. Som figuren indikerer, kræver denne transformation både translation i x-aksens og y-aksens retning samt en rotation om både x- og z-aksen. \\ 
+
+\fixme{Ændre 'Figure' til 'Figur'}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4]{images/img2base}
+\caption{Billedkoordinatsæt og robotkoordinatsæt i forhold til bord.}
+\label{fig:img2base}
+\end{figure}
+
+I implementeringen af dette oprettes derfor to matricer - en transformationsmatrix med både translation og rotation og en rotationsmatrix for den sidste rotation. Dette kan ses i \autoref{transformation}. Matrix A translaterer koordinaterne langs x- og y-aksen og roterer disse omkring x-aksen. Matrix B roterer koordinaterne om z-aksen. For at anvende disse matricer, skal koordinattet, som skal transformeres, være et homogent koordinat.
+
+\begin{lstlisting}[caption=Matricer til transformation., label=transformation, language=Python]
+A = np.matrix([
+    [1, 0,           0,            tx],
+    [0, cos(thetax), -sin(thetax), ty],
+    [0, sin(thetax), cos(thetax),  tz],
+    [0, 0,           0,            1 ]
+    ])
+
+B = np.matrix([
+    [cos(thetaz),  sin(thetaz), 0, 0],
+    [-sin(thetaz), cos(thetaz), 0, 0],
+    [0,            0,           1, 0],
+    [0,            0,           0, 1]
+    ])
+\end{lstlisting}
+
+
+\textbf{find\_orientation} \\
+Denne funktion har til formål at bestemme orienteringen på klodsen i forhold til robottens x-akse.\\
+% subsubsection block (end)
