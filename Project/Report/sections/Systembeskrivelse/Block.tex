@@ -38,7 +38,36 @@ B = np.matrix([
     ])
 \end{lstlisting}
 
-
 \textbf{find\_orientation} \\
-Denne funktion har til formål at bestemme orienteringen på klodsen i forhold til robottens x-akse.\\
+Denne funktion har til formål at bestemme orienteringen på klodsen i forhold til robottens x-akse. Robotten har to orienteringer, da den har to ikke parallelle sider. Dette er illustreret på \autoref{fig:find_orientation}. \\
+
+\fixme{Ændre 'Figure' til 'Figur'}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.4]{images/findOrientation}
+\caption{Blokkens orientering i forhold til robottens x-akse.}
+\label{fig:find_orientation}
+\end{figure}
+
+Fra den tidligere billedprocessering kendes klodsens fire hjørner. Ud fra disse fire hjørner fås to vektorer, som har samme orientering som klodsens to sider. Vinklen mellem disse to vektorer og x-aksen er orienteringen. Vektoren findes ved at trække de to punkter fra hinanden og viklen opnås ved at bruge tangens på $y/x$. Implementationen af dette ses i \autoref{orientation}.
+
+\begin{lstlisting}[caption=Funktion til at finde orientering på en klods., label=orientation, language=Python]
+def find_orientations(self, block_corners):
+    thetas = []
+
+    for i in range(0, 2):
+        corner1 = self.img2base_transform(block_corners[i][0], block_corners[i][1])
+        corner2 = self.img2base_transform(block_corners[i+1][0], block_corners[i+1][1])
+
+        dx = corner2[0] - corner1[0]
+        dy = corner2[1] - corner1[1]
+
+        theta = atan2(dy, dx)
+
+        thetas.append(theta)
+
+    return thetas
+\end{lstlisting}
+
 % subsubsection block (end)
