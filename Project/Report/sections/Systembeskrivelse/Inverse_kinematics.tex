@@ -1,0 +1,38 @@
+%!TEX root = ../../Master.tex
+\subsubsection{Inverse kinematics}
+\label{subsub: Inverse kinematics}
+
+Funktionen Inverse kinematics har til formål at udregne og bestemme Crustcrawlerarmens ledvinkler på baggrund af det bestemte midtpunkt for klodserne. Den tager et input (self, x, y, z, $\theta$) som beskriver et punkt for klodserne i rummet, P(x, y, z) og en vinkel for gripperen, $\theta$. Ud fra det bestemte punkt er det muligt at finde positionen til end-effektoren. x, y, z bruges til at beregne $q_1$, $q_2$, $q_3$, $q_4$. Hver q-parameter beskriver en ledvinkel for det tilsvarende led.\\
+
+Vinklen for $q_1$ er givet ved at finde vinklen ud til punktet set fra robottens origo. Dette kan gøres ved at tage $atan2(\frac{y}{x})$ til vinklen:
+\begin{equation}
+q_1 = atan2(\frac{y}{x})
+\end{equation}
+Derefter bestemmes parametrene $r^2, s, D$. Disse skal bruges til at bestemme $q_2$ og $q_3$. \\
+
+$r^2$ er givet ved:
+\begin{equation}
+r^2 = (x - a_1 * \cos(q_1))^2 + (y - a_1 * \sin(q_1))^2
+\end{equation}
+Her er $a_1$ afstanden langs med y-aksen til 2. led, x og y er klodsens koordinat.\\
+
+$s$ er givet ved:
+\begin{equation}
+s = z - d_1
+\end{equation}
+Her er $d_1$ højden af 2. led, z er klodsens koordinat.\\
+
+$D$ er givet ved:
+\begin{equation}
+D = \frac{r^2 + s^2 - a_2^2 - d_4^2}{2 * a_2 * d_4}
+\end{equation}
+Her er $a_2$ afstanden mellem 2. og 3. led, $d_4$ er afstanden fra 3. led til gripperen.\\
+
+Nu da der er blevet defineret en længde og højde til punktet, er det muligt at finde de korrekte vinkler for $q_2$ og $q_3$:
+\begin{equation}
+q_3 = atan2\frac{-\sqrt{1 - D^2}}{D}
+\end{equation}
+
+\begin{equation}
+q_2 = atan2\frac{s}{sqrt(r^2)} - atan2\frac{d_4 * \sin(q_3)}{a_2 + d_4 * \cos(q_3)} - \frac{\pi}{2}
+\end{equation}
