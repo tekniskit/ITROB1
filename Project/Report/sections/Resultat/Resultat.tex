@@ -1,0 +1,24 @@
+%!TEX root = ../../Master.tex
+\clearpage
+\section{Resultat} % (fold)
+\label{sec:resultat}
+
+For at sikre et godt overblik over resultatet af dette projekt er systemets mål blevet opdelt i delmål, som skal opfyldes. En oversigt over resultaterne for dette projekt kan ses i \autoref{tab:resultater}.\\
+
+\renewcommand{\arraystretch}{2}
+\begin{table}[h]
+	\centering
+    \begin{tabular}{ | l | p{5cm} | l | p{7cm} |}
+    \hline
+      & Systemkrav & Succes & Kommentar \\ \hline
+    1 & System skal kunne detektere klodser, som ligger på bordet foran robotten & OK* & *Sommetider detekteres klodserne ikke helt korrekt, hvilket gør at robotten ikke griber korrekt om klodserne. \\ \hline
+    2 & Systemet skal kunne gribe om klodserne og flytte disse & OK* & Robotten går ud fra at alle klodser er lige store og kvadratiske. Hvis dette ikke er opfyldt, kan robotten muligvis ikke gribe og flytte klodsen. \\ \hline
+    3 & Systemet skal kunne sortere klodser efter farve & OK* & Robotten kan sortere klodserne, hvis disse har den samme varantion af en farve. Ved to klodser med hver sin f.eks. gule farve er det ikke sikkert at robotten kan identificerer disse to klodser som værende samme farve. \\ \hline
+    \end{tabular}
+    \caption{Oversigt over resultater for projekt}
+    \label{tab:resultater}
+\end{table}
+
+Som det ses i \autoref{tab:resultater} lever projektet delvist op til de krav, som der blev stillet til det. Grunden til de enkelte mangler, som er udspecificeret i kommentarerne, samt forslag til udbedringer af disse vil blive diskuteret i rapportens diskussions afsnit.
+
+% section resultat (end)
