@@ -2,18 +2,12 @@
 \subsubsection{CrustCrawler}
 \label{subsub: CrustCrawler}
 
-Klassen CrustCrawler er en klasse til håndtering af armens positionering. Den har til formål at fortolke det koordinat som fås fra \textbf{block} klassen, og udregne vinkelpositionerne for armens lad, således at det er muligt for armen at gribe klodsen.\\
+Klassen CrustCrawler er en klasse til håndtering af armens positionering. Den har til formål at fortolke det koordinat som fås fra \textbf{block} klassen, og udregne vinkelpositionerne for armens led, således at det er muligt for armen at gribe klodsen.\\
 
-\textbf{inverse\_kinematics}\\
-Funktionen har til formål at udregne og bestemme Crustcrawlerarmens ledvinkler på baggrund af det bestemte midtpunkt for klodserne. Den tager et input (self, x, y, z, $\theta$) som beskriver et punkt for klodserne i rummet, P(x, y, z) og en vinkel for gripperen, $\theta$. Ud fra det bestemte punkt er det muligt at finde positionen til end-effektoren. x, y, z bruges til at beregne $q_1$, $q_2$, $q_3$, $q_4$. Hver q-parameter beskriver en ledvinkel for det tilsvarende led.\\
+\textbf{inverse\_kinematics\_point}\\
+Funktionen har til formål at udregne og bestemme robotarmens ledvinkler på baggrund af det bestemte midtpunkt for klodserne. Den tager et input (self, x, y, z) som beskriver et punkt for klodserne i rummet, P(x, y, z). Ud fra det bestemte punkt er det muligt at finde positionen til end-effektoren. x, y, z bruges til at beregne $q_1$, $q_2$, $q_3$. Hver q-parameter beskriver en ledvinkel for det tilsvarende led. Udregningen af parametrene kan ses i \autoref{inverse kinematics funktion}\\
 
-Vinklen for $q_1$ er givet ved at finde vinklen ud til punktet set fra robottens origo. Dette kan gøres ved at tage $atan2(\frac{y}{x})$ til vinklen:
-
-\begin{equation}
-q_1 = atan2(\frac{y}{x})
-\end{equation}
-
-Derefter bestemmes parametrene $r^2, s, D$. Disse er geometriske parametre som anvendes til at bestemme $q_2$ og $q_3$. Nedenfor er det illustreret i \autoref{fig:geometric_approach}, hvordan parametrene tolkes.\\
+Parametrene $r^2, s, D$ er geometriske parametre som anvendes til at bestemme $q_2$ og $q_3$. Nedenfor er det illustreret i \autoref{fig:geometric_approach}, hvordan parametrene tolkes.\\
 
 \begin{figure}[h]
 \centering
@@ -22,59 +16,42 @@ Derefter bestemmes parametrene $r^2, s, D$. Disse er geometriske parametre som a
 \label{fig:geometric_approach}
 \end{figure}
 
-$r^2$ er givet ved:
+\newpage
+\textbf{inverse\_kinematics\_block}\\
+Funktionen har til opgave at bestemme orienteringen af gripperen så den kan gribe klodsen. Dette sker efter at centrum er fundet. Den kalder funktionen \textbf{find\_orientation} som har fundet den mindste $q_4$-værdi som gør at gripperen skal roteres mindst muligt.
 
-\begin{equation}
-r^2 = (x - a_1 * \cos(q_1))^2 + (y - a_1 * \sin(q_1))^2
-\end{equation}
+\begin{lstlisting}[caption=inverse\_kinematics funktion, label=inverse kinematics funktion, language=Python]
+    def inverse_kinematics_block(self, x, y, z, block):
+        d1 = 10.0  # cm (height of 2nd joint)
+        a1 = 0.0   # (distance along "y-axis" to 2nd joint)
+        a2 = 20.0  # (distance between 2nd and 3rd joints)
+        d4 = 20.0  # (distance from 3rd joint to gripper center - all inclusive, ie. also 4th joint)
 
-Her er $a_1$ afstanden fra 1. led til 2. led, x og y er klodsens koordinat.\\
+        q1 = atan2(y, x)
 
-$s$ er givet ved:
+        # calculation of q2 and q3
+        r2 = (x - a1 * cos(q1)) ** 2 + (y - a1 * sin(q1)) ** 2
+        s = z - d1
+        D = (r2 + s ** 2 - a2 ** 2 - d4 ** 2) / (2 * a2 * d4)
 
-\begin{equation}
-s = z - d_1
-\end{equation}
+        q3 = atan2(-sqrt(1 - D ** 2), D)
 
-Her er $d_1$ højden af 2. led, z er klodsens koordinat.\\
+        q2 = atan2(s, sqrt(r2)) - atan2(d4 * sin(q3), a2 + d4 * cos(q3)) - pi / 2
 
-$D$ er givet ved:
+        q4 = - block.find_orientation(q1)
 
-\begin{equation}
-D = \frac{r^2 + s^2 - a_2^2 - d_4^2}{2 * a_2 * d_4}
-\end{equation}
-
-Her er $a_2$ afstanden mellem 2. og 3. led, $d_4$ er afstanden fra 3. led til gripperen.\\
-
-Nu da der er blevet defineret en længde og højde til punktet, er det muligt at finde de korrekte vinkler for $q_2$ og $q_3$:
-
-\begin{equation}
-q_3 = atan2\frac{-\sqrt{1 - D^2}}{D}
-\end{equation}
-
-\begin{equation}
-q_2 = atan2\frac{s}{sqrt(r^2)} - atan2\frac{d_4 * \sin(q_3)}{a_2 + d_4 * \cos(q_3)} - \frac{\pi}{2}
-\end{equation}
-
-Som sidste led i processen skal $q_4$ bestemmes. Til det er det nødvendigt at sammenligne de to $\theta$ som er blevet identificeret i \textbf{block} klassen. Da $q_4$ giver vinklen for gripperen er man interesseret i at den skal rotere mindst muligt. Altså skal det være den mindste værdi af $\theta - q_1$ som vælges:
-
-\begin{lstlisting}[caption=if sætning $q_4$, label=q4 bestemmelse, language=Python]
-        q4_1 = abs(thetas[0]) - abs(q1)
-        q4_2 = abs(thetas[1]) - abs(q1)
-
-        q4 = q4_1
-
-        if abs(q4_2) < abs(q4_1):
-            q4 = q4_2
+        return q1, q2, q3, q4
 \end{lstlisting}
 
-\textbf{move\_to}\\
-Funktionen move\_to har til formål generere den sti af punkter som armen skal følge på baggrund af de bestemte værdier i \textbf{inverse\_kinematics}. Den anvender ROS specifikke kommandoer til at bestemme motorerenes position, hastighed og udførelsestid. Dette foregår altsammen igennem JointTrajectoryPoint, som er en del af ROS robot trajectory bibliotek.\\
+\textbf{move\_to\_point}\\
+Funktionen \textbf{move\_to\_point} har til formål generere den sti af punkter som robotarmen skal følge på baggrund af de bestemte positionsværdier i \textbf{inverse\_kinematics\_point}. Den anvender ROS specifikke kommandoer til at bestemme motorerenes position, hastighed og udførselstid. på \autoref{move to point funktion}\\
 
-\begin{lstlisting}[caption=if sætning $q_4$, label=q4 bestemmelse, language=Python]
-    def move_to(self, x, y, z, thetas):
+Dette foregår altsammen igennem \textbf{JointTrajectoryPoint}, som sætter positionerne til de bestemte værdier i \textbf{inverse\_kinematics\_point} samt begrænsningerne for hvert motorleds acceleration og hastighed. \textbf{JointTrajectory} er ansvarlig for at definere hvilke motorled der indgår i modellen. Sidste del er \textbf{FollowJointTrajectoryGoal} som sætter målet for armen og det afsatte tidsinterval til at nå positionen.\\
+
+\begin{lstlisting}[caption=move\_to\_point funktion, label=move to point funktion, language=Python]
+    def move_to_point(self, x, y, z):
         jtp = JointTrajectoryPoint(
-            positions=self.inverse_kinematics(x, y, z, thetas),
+            positions=self.inverse_kinematics_point(x, y, z),
             velocities=[0.5] * 4,
             time_from_start=rospy.Duration(2)
         )
@@ -90,4 +67,7 @@ Funktionen move\_to har til formål generere den sti af punkter som armen skal f
         self.client.wait_for_result()
 \end{lstlisting}
 
-Klassen \textbf{Crustcrawler} har ud over de ovenstående centrale funktioner, underfunktioner som specificerer bevægelsesmønstret for armen i de forskellige situationer. Såsom åbn/luk gripper, saml op/placer klods, placer klods højre/venstre og en reset position. Allesammen anvender de \textbf{move\_to} funktionen.
+\textbf{move\_to\_block}\\
+Denne funktion har samme opgave som \textbf{move\_to\_point}, med den ene forskel at dens opgave er at kontrollere motorledene med henblik på klodsorientering.\\
+
+Klassen \textbf{CrustCrawler} har ud over de ovenstående centrale funktioner, underfunktioner som specificerer bevægelsesmønstret for armen i de forskellige situationer ved brug af \textbf{move\_to} og \textbf{gripper} funktionerne. Såsom åbn/luk gripper, saml op/placer klods, placer klods højre/venstre og en reset position.
