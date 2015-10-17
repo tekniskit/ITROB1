@@ -1,0 +1,15 @@
+1.3 ROS - Ændre formulering om kameraet, hvor er kameraet placeret? Det sidder ikke på robotten, men er en del af robotstanden.
+1.3 ROS - Rette til hvad der endeligt skal stå i afsnittet.
+2.3.1 Klods identifikation - "vi" og "vores" bruger vi det ord? :)
+2.3.1 Klods identifikation - nederst side 8 om "Det skyldes at de tykke kanter i billedet
+kan blive til to konturer" jeg er ikke helt med på hvad der menes der? 
++ en kommentar om at det efter identifikation af klodserne er hjørnerne vi bruger videre i forløbet.
+2.4 - Der skal byttes om på ROS node og CrustCrawler afsnit.
+2.4.1 -  Der skal tilpasse billeder. så de stemmer overens med deres afsnit
+
+Diskussion -  Under diskussion er der den del med billedtransformationen 
+som jeg ikke har turdet skrive om. Så hvis vi skal have det med skal en anden nok lige tage et kig på det.
+
+Ellers synes jeg at vi er ret godt omkring det som er relevant i systemet.
+
+

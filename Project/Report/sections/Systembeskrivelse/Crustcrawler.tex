@@ -2,10 +2,10 @@
 \subsubsection{CrustCrawler}
 \label{subsub: CrustCrawler}
 
-Klassen CrustCrawler er en klasse til håndtering af armens positionering. Den har til formål at fortolke det koordinat som fås fra \textbf{block} klassen, og udregne vinkelpositionerne for robotarmens led, således at det er muligt for armen at gribe klodsen.\\
+Klassen CrustCrawler er en klasse til håndtering af robotarmens positionering. Den har til formål at fortolke det koordinat som fås fra \textbf{block} klassen, og udregne vinkelpositionerne for robotarmens led, således at det er muligt for robotarmen at gribe klodsen.\\
 
 \textbf{inverse\_kinematics\_point}\\
-Funktionen har til formål at udregne og bestemme robotarmens ledvinkler på baggrund af det bestemte midtpunkt for klodserne. Den tager et input (self, x, y, z) som beskriver et punkt for klodserne i rummet, P(x, y, z). Ud fra det bestemte punkt er det muligt at finde positionen til end-effektoren. x, y, z bruges til at beregne $q_1$, $q_2$, $q_3$. Hver q-parameter beskriver en ledvinkel for det tilsvarende led. Udregningen af parametrene kan ses i \autoref{inverse kinematics funktion}\\
+Funktionen har til opgave at udregne og bestemme robotarmens ledvinkler på baggrund af det bestemte midtpunkt for klodserne. Den tager et input (self, x, y, z) som beskriver et punkt for klodserne i rummet, P(x, y, z). Ud fra det bestemte punkt er det muligt at finde positionen til end-effektoren. x, y, z bruges til at beregne $q_1$, $q_2$, $q_3$. Hver q-parameter beskriver en ledvinkel for det tilsvarende led. Udregningen af parametrene kan ses i \autoref{inverse kinematics funktion}\\
 
 Parametrene $r^2, s, D$ er geometriske parametre som anvendes til at bestemme $q_2$ og $q_3$. Nedenfor er det illustreret i \autoref{fig:geometric_approach}, hvordan parametrene tolkes.\\
 
@@ -18,7 +18,7 @@ Parametrene $r^2, s, D$ er geometriske parametre som anvendes til at bestemme $q
 
 \newpage
 \textbf{inverse\_kinematics\_block}\\
-Funktionen har til opgave at bestemme orienteringen af gripperen så den kan gribe klodsen. Dette sker efter at centrum er fundet. Den kalder funktionen \textbf{find\_orientation} som har fundet den mindste $q_4$-værdi som gør at gripperen skal roteres mindst muligt.
+Funktionen har ligesom \textbf{inverse\_kinematics\_point} til opgave at bestemme orienteringen af robotarmensled. Men med fokus på gripperen, så den kan gribe klodsen. Dette sker efter at centrum er fundet. Den kalder funktionen \textbf{find\_orientation} som har fundet den mindste $q_4$-værdi som siger noget om hvor meget gripperen skal roteres i forhold til klodsen.
 
 \begin{lstlisting}[caption=inverse\_kinematics funktion, label=inverse kinematics funktion, language=Python]
     def inverse_kinematics_block(self, x, y, z, block):
@@ -44,7 +44,7 @@ Funktionen har til opgave at bestemme orienteringen af gripperen så den kan gri
 \end{lstlisting}
 
 \textbf{move\_to\_point}\\
-Funktionen \textbf{move\_to\_point} har til formål generere den sti af punkter som robotarmen skal følge på baggrund af de bestemte positionsværdier i \textbf{inverse\_kinematics\_point}. Den anvender ROS specifikke kommandoer til at bestemme motorerenes position, hastighed og udførselstid. på \autoref{move to point funktion}\\
+Funktionen \textbf{move\_to\_point} har til formål generere den sti af punkter som robotarmen skal følge på baggrund af de bestemte positionsværdier i \textbf{inverse\_kinematics\_point}. Den anvender ROS specifikke kommandoer til at bestemme motorerenes position, hastighed og udførselstid. På \autoref{move to point funktion} ses implementeringen af funktionen.\\
 
 Dette foregår altsammen igennem \textbf{JointTrajectoryPoint}, som sætter positionerne til de bestemte værdier i \textbf{inverse\_kinematics\_point} samt begrænsningerne for hvert motorleds acceleration og hastighed. \textbf{JointTrajectory} er ansvarlig for at definere hvilke motorled der indgår i modellen. Sidste del er \textbf{FollowJointTrajectoryGoal} som sætter målet for armen og det afsatte tidsinterval til at nå positionen.\\
 
@@ -70,4 +70,4 @@ Dette foregår altsammen igennem \textbf{JointTrajectoryPoint}, som sætter posi
 \textbf{move\_to\_block}\\
 Denne funktion har samme opgave som \textbf{move\_to\_point}, med den ene forskel at dens opgave er at kontrollere motorledene med henblik på klodsorientering.\\
 
-Klassen \textbf{CrustCrawler} har ud over de ovenstående centrale funktioner, underfunktioner som specificerer bevægelsesmønstret for armen i de forskellige situationer ved brug af \textbf{move\_to} og \textbf{gripper} funktionerne. Såsom åbn/luk gripper, saml op/placer klods, placer klods højre/venstre og en reset position.
+Klassen \textbf{CrustCrawler} har ud over de ovenstående centrale funktioner, underfunktioner som specificerer bevægelsesmønstret for robotarmen i de forskellige situationer ved brug af \textbf{move\_to} og \textbf{gripper} funktionerne. Såsom åbn/luk gripper, saml op/placer klods, placer klods højre/venstre og en reset position.

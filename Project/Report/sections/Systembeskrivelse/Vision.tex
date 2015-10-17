@@ -2,14 +2,14 @@
 \subsection{Vision system}
 Vision systemet består grundlæggende af 4 steps; preprocessering, edge detection, countour detection og til sidst at finde klodserne blandt konturerne. \\
 
-Før udviklingen af vision systemet generede vi et testsæt af billeder og et script til at teste vision systemet på sættet samt at bedømme systemets effektivitet.
-Testsættet blev generet ud fra 10 billeder taget under forskellige lysforhold.
+Før udviklingen af vision systemet genererede vi et testsæt af billeder og et script til at teste vision systemet på sættet samt at bedømme systemets effektivitet.
+Testsættet blev genereret ud fra 10 billeder taget under forskellige lysforhold.
 Forskellige lysforhold blev implementeret ved at give kraftig belysning med en lommelygte der gav meget markante skygger på billederne. \\
 Ud fra de 10 billeder blev der genereret eksponentielt flere billeder ved at ændre brightness, contrast og hue.
 Det gav billeder med meget forskellige farver og lysforhold. \\
 På alle billeder var der placeret fire klodser med samme position og rotation.
-Dette gjorde evalueringen af vision systemet næmmere da vi blot skulle tjekke om det fandt alle fire klodser og at de blevet fundet hvor vi havde placeret dem.
-Det betyder dog også at systemet i teorien kan blive for specifik i sin identifikation og ikke ville virke med et andet antal klodser med andre placeringer. \\
+Dette gjorde evalueringen af vision systemet nemmere da vi blot skulle tjekke om det fandt alle fire klodser og at de blevet fundet hvor vi havde placeret dem.
+Det betyder dog også at systemet i teorien kan blive for specifik i sin identifikation og vil ikke virke med et andet antal klodser med andre placeringer. \\
 
 Vision systemet er udviklet igennem trial and error, ved at evaluere systemet på det testsættet af billeder. \\
 
@@ -18,12 +18,12 @@ Vision systemet er udviklet igennem trial and error, ved at evaluere systemet p�
 Billede behandlingen starter med at et billede fra robotten skæres til, så kun bordpladen er på billedet (Se figur \ref{fig:cropped}).
 Det gøres for at undgå at dele af robotten identificeres som en klods.
 Det betyder også at robotten skal stå det samme sted hver gang vi tager et billede, så robotten holder sig udenfor billedet.
-Vi skjuler også området hvor robotten placer klodserne igennem sorteringen for at robotten ikke begynder at flytte dem igen. \\
+Vi skjuler også området hvor robotten placerer klodserne igennem sorteringen for at robotten ikke begynder at flytte dem igen. \\
 
 Som en ekstra del af preprocesseringen udføres en udglatning af billedet (Se figur \ref{fig:smooth}).
 Det gøres for at fjerne højfrekvente dele af billedet som senere fejlagtigt kunne detekteres som en kant.
 Vi bruger et adaptive bilateral filter til denne udglatning.
-I følge dokumentationen på opencv.org er det godt til at bevare kanter i billedet selvom billedet udglattes. Det er tilgengæld meget beregningstungt, hvilket dog ikke er væsenligt i vores projekt. \\
+Ifølge dokumentationen på opencv.org er det godt til at bevare kanter i billedet selvom billedet udglattes. Det er tilgengæld meget beregningstungt, hvilket dog ikke er væsenligt i vores projekt. \\
 
 \begin{figure}[H]
 	\centering
@@ -47,7 +47,7 @@ I følge dokumentationen på opencv.org er det godt til at bevare kanter i bille
 Nu bruges en canny edge detektor til at finde kanterne i billedet (Se figur \ref{fig:canny}).
 Kanterne er ikke sammenhængende, men blot nogle pixels der er blevet markeret som værende en del af en kant. \\
 
-For at samle disse pixels til en sammenhængende kant bruges en morfologiske transformation (Se figur \ref{fig:close}).
+For at samle disse pixels til en sammenhængende kant bruges en morfologisk transformation (Se figur \ref{fig:close}).
 Closing, der består af dilation efterfulgt af erosion, bruges til at lukke huller imellem pixels. \\
 
 \begin{figure}[H]
