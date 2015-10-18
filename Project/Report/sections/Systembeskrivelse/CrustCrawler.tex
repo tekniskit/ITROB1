@@ -2,10 +2,10 @@
 \subsubsection{CrustCrawler}
 \label{subsub: CrustCrawler}
 
-Klassen CrustCrawler er en klasse til håndtering af robotarmens positionering. Den har til formål at fortolke det koordinat som fås fra \textbf{block} klassen, og udregne vinkelpositionerne for robotarmens led, således at det er muligt for robotarmen at gribe klodsen.\\
+Klassen CrustCrawler er en klasse til håndtering af robotarmens positionering. Den har til formål at fortolke det koordinat som fås fra \textbf{Block} klassen, og udregne vinkelpositionerne for robotarmens led, således at det er muligt for robotarmen at gribe klodsen.\\
 
 \textbf{inverse\_kinematics\_point}\\
-Funktionen har til opgave at udregne og bestemme robotarmens ledvinkler på baggrund af det bestemte midtpunkt for klodserne. Den tager et input (self, x, y, z) som beskriver et punkt for klodserne i rummet, P(x, y, z). Ud fra det bestemte punkt er det muligt at finde positionen til end-effektoren. x, y, z bruges til at beregne $q_1$, $q_2$, $q_3$. Hver q-parameter beskriver en ledvinkel for det tilsvarende led. Udregningen af parametrene kan ses i \autoref{inverse kinematics funktion}\\
+Denne funktion har til opgave at udregne og bestemme robotarmens ledvinkler på baggrund af det bestemte midtpunkt for klodserne. Den tager et input (self, x, y, z) som beskriver et punkt for klodserne i rummet, P(x, y, z). Ud fra det bestemte punkt er det muligt at finde positionen til end-effektoren. x, y, z bruges til at beregne $q_1$, $q_2$, $q_3$. Hver q-parameter beskriver en ledvinkel for det tilsvarende led. Udregningen af parametrene kan ses i \autoref{inverse kinematics funktion}\\
 
 Parametrene $r^2, s, D$ er geometriske parametre som anvendes til at bestemme $q_2$ og $q_3$. Nedenfor er det illustreret i \autoref{fig:geometric_approach}, hvordan parametrene tolkes.\\
 
