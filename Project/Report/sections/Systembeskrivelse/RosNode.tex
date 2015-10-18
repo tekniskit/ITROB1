@@ -1,5 +1,5 @@
 %!TEX root = ../../Master.tex
-\subsection{ROS node}
+\subsubsection{ROS node}
 Selve ROS noden der står for at køre vores program er meget simpel da alt kompleksitet er abstraheret væk i klasserne Camera og CrustCrawler, der henholdsvist står for at identificere klodser og flytte klodser. \\
 
 Figur \ref{fig:node-flow} viser flowet i node programmet.
@@ -15,7 +15,7 @@ Derfor implementerede vi fejlhåntering ved at tage et nyt billede efter robotte
 Hvis nye klodser identificeres starter robotten igen, indtil der ikke er flere klodser.
 Denne løsning gør det også muligt at ligge flere klodser på bordet, og få disse klodser sorteret, efter robotten er startet.
 
-\begin{figure}
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=.7]{images/node-flow}
 	\caption{Flowdiagram for ROS node}

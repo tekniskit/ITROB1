@@ -9,7 +9,7 @@ Denne funktion har til formål at transformere koordinatsættet fra billedet, so
 
 Første del af funktionen står for at oversætte pixelkoordinater til koordinater i cm. Dette er gjort ved at finde antallet af pixels på en cm på billedet og derved dele alle pixel koordinater med dette. \\
 
-Den sidste del består i at transformere billedkoordinatsættet til robotkoordinatsættet. De to koordinatsæt er illustret i \autoref{fig:img2base}, hvor koordinatsættet øverst i venstre side er for billedet og koordinatsættet nederst i midten er for robotten. Som figuren indikerer, kræver denne transformation både translation i x-aksens og y-aksens retning samt en rotation om både x- og z-aksen. \\
+Den sidste del består i at transformere billedkoordinatsættet til robotkoordinatsættet. De to koordinatsæt er illustret i figur \ref{fig:img2base}, hvor koordinatsættet øverst i venstre side er for billedet og koordinatsættet nederst i midten er for robotten. Som figuren indikerer, kræver denne transformation både translation i x-aksens og y-aksens retning samt en rotation om både x- og z-aksen. \\
 
 \fixme{Ændre 'Figure' til 'Figur'}
 
@@ -46,7 +46,7 @@ Denne funktion er en hjælpefunktion, som bruges til at rotere en vektor $[x,y]$
 \textbf{find\_orientation} \\
 Denne funktion har til formål at bestemme orienteringen på klodsen i forhold til robotten. Klodsen har to orienteringer, da den har to ikke parallelle sider. \\
 
-Fra den tidligere billedprocessering kendes klodsens fire hjørner. Ud fra disse fire hjørner fås to vektorer, som har samme orientering som klodsens to sider. Vinklen mellem hver af disse to vektorer og x-aksen er orienteringen. Vektoren findes ved at trække de to punkter fra hinanden og viklen opnås ved at bruge tangens på $y/x$. Implementeringen af dette ses i \autoref{orientation}. \\
+Fra den tidligere billedprocessering kendes klodsens fire hjørner. Ud fra disse fire hjørner fås to vektorer, som har samme orientering som klodsens to sider. Vinklen mellem hver af disse to vektorer og x-aksen er orienteringen. Vektoren findes ved at trække de to punkter fra hinanden og vinklen opnås ved at bruge tangens på $y/x$. Implementeringen af dette ses i \autoref{orientation}. \\
 
 Den sidste detalje er så, at orienteringen ikke skal regnes ud fra basens x-akse, men i stedet ud fra den x-akse, som følger robottens første rotationsled. Derfor transformeres vektorens koordinater til dette koordinatsystem, som er roteret lige så meget om z-aksen, som robottens første rotationsled, $q1$. Derved kan den beregnede orientation bruges som input til robottens fjerde rotationsled, hvor gripperen er monteret på. \\
 
